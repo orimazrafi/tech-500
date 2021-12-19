@@ -1,24 +1,36 @@
 import React from 'react';
 
-const Grid = ({ config, data }) => (
-  <table>
-    <thead>
-    <tr>
-      <th>Col 1</th>
-      <th>Col 2</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>Data 1</td>
-      <td>Data 2</td>
-    </tr>
-    <tr>
-      <td>Data 1</td>
-      <td>Data 2</td>
-    </tr>
-    </tbody>
-  </table>
-);
+const headlineField = 'title';
+const Grid = ({ config, data }) => {
+	return (
+		<table>
+			<thead>
+				<tr>
+					{config.map((con) => (
+						<th key={con?.[headlineField]}>
+							{con?.[headlineField]}
+						</th>
+					))}
+				</tr>
+			</thead>
+			<tbody>
+				{data?.map((tableBody, index) => (
+					<tr key={tableBody?.[Object.keys(tableBody)?.[0]] || index}>
+						{config?.map((con) => (
+							<td key={tableBody?.[con?.field]}>
+								{con?.component &&
+								typeof con?.component === 'function'
+									? con.component({
+											data: tableBody?.[con?.field],
+									  })
+									: tableBody?.[con?.field]}
+							</td>
+						))}
+					</tr>
+				))}
+			</tbody>
+		</table>
+	);
+};
 
 export default Grid;
